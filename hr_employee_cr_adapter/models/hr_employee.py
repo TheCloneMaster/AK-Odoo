@@ -23,16 +23,16 @@ class hr_employee(models.Model):
         string="Initial Date"
     )
 
-    first_day = field.Integer(
-        compute='_compute_first_day',
-        store=True,
-        string="Day of the month on the initial date",
-        help="Specify the day of the month (number) when the employee started working for the company"
-    )
+    # first_day = field.Integer(
+    #     compute='_compute_first_day',
+    #     store=True,
+    #     string="Day of the month on the initial date",
+    #     help="Specify the day of the month (number) when the employee started working for the company"
+    # )
     
-    @api.depends('initial_date')
-    def _compute_first_day(self):
-        if initial_date is None:
-            0
-        else:
-           int(initial_date.strftime("%d"))
+    # @api.depends('initial_date')
+    # def _compute_first_day(self):
+    #     if initial_date is None:
+    #         self.first_day = 0
+    #     else:
+    #        self.first_day = int(initial_date.strftime("%d"))

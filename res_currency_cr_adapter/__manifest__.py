@@ -10,7 +10,7 @@
     'license': 'AGPL-3',
     'depends': ['base', 'hr', 'account_cancel'],
     'data': [
-        'views/hr_employee_view.xml'
+        'views/res_currency_rate_view.xml'
     ],
     'installable': True,
     'auto_install': False,

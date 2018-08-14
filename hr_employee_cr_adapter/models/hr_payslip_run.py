@@ -11,7 +11,4 @@ class HRPayslipRun(models.Model):
         help="Set the date this payroll was executed",
         string="Date when the payment was executed to calculate everything with the right exchange rate"
     )
-
-    @api.onchange
-    def _update_payslip_date(self)
         

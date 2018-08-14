@@ -1,10 +1,11 @@
 .. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
     :alt: License: AGPL-3
 
-Employee Costa Rica Adapter
+Currency Costa Rica Adapter
 ===========================
+
 This module includes these functionalities:
-1- Automated task to add a vacation day every month for each employee.
+1- Automated task to update exchange rate from "Banco Central de Costa Rica" 
 
 This module adds the following to employees :
 
