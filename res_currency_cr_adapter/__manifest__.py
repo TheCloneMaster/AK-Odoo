@@ -2,13 +2,13 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': 'Employee Costa Rica Adapter',
+    'name': 'Currency Costa Rica Adapter',
     'version': '11.0.1.0.0',
-    'category': 'Human Resources',
+    'category': 'Account',
     'author': "Akurey S.A.",
-    'website': 'https://github.com/akurey/odoo',
+    'website': 'https://github.com/akurey/ak-odoo',
     'license': 'AGPL-3',
-    'depends': ['base', 'hr', 'account_cancel'],
+    'depends': ['base'],
     'data': [
         'views/res_currency_rate_view.xml'
     ],

@@ -13,6 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
+#. module: res_currency_cr_adapter
 #: model:ir.model.fields,field_description:res_currency_rate_original_rate.field_res_currency_rate_original_rate
 msgid "Original selling exchange rate from BCCR"
 msgstr "Indicates exchange rate used by financial institutions to sell USD in its normal value"

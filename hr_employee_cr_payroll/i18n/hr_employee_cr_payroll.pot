@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* hr_employee_cr_adapter
+#	* hr_employee_cr_payroll
 #
 msgid ""
 msgstr ""
@@ -13,22 +13,22 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#. module: hr_employee_cr_adapter
+#. module: hr_employee_cr_payroll
 #: model:ir.model.fields,field_description:hr_employee_marital_exoneration.field_hr_employee_marital_exoneration
 msgid "Marital Exoneration"
 msgstr "Indicates if taxes exoneration should be applied because of the married status"
 
-#. module: hr_employee_cr_adapter
+#. module: hr_employee_cr_payroll
 #: model:ir.model.fields,field_description:hr_employee_children_exoneration.field_hr_employee_children_exoneration
 msgid "Children Exoneration"
 msgstr "Indicates if taxes exoneration should be applied because of children"
 
-#. module: hr_employee_cr_adapter
+#. module: hr_employee_cr_payroll
 #: model:ir.model.fields,field_description:hr_employee_initial_date.field_hr_employee_initial_date
 msgid "Initial Date"
 msgstr "Indicates the initial date of the employee working for the company"
 
-#. module: hr_employee_cr_adapter
-#: model:ir.model,name:hr_employee_cr_adapter.model_hr_employee
-msgid "Employee adapter for Costa Rica"
+#. module: hr_employee_cr_payroll
+#: model:ir.model,name:hr_employee_cr_payroll.model_hr_employee
+msgid "Employee Payroll for Costa Rica"
 msgstr "Creates fields and proceses to comply with Costa Rica laws and taxes"

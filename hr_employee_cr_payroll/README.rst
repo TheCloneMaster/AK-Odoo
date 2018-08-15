@@ -1,10 +1,13 @@
 .. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
     :alt: License: AGPL-3
 
-Employee Costa Rica Adapter
-===========================
+Costa Rica Payroll
+==================
 This module includes these functionalities:
 1- Automated task to add a vacation day every month for each employee.
+2- Add fields for Complementary retirement plan (apply exoneration over that amount)
+3- Add configuration fields for Salary rent tax ranges.
+4- Add default rules to calculate CCSS and rent according to the config fields.
 
 This module adds the following to employees :
 

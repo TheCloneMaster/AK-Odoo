@@ -5,13 +5,15 @@ Currency Costa Rica Adapter
 ===========================
 
 This module includes these functionalities:
-1- Automated task to update exchange rate from "Banco Central de Costa Rica" 
 
-This module adds the following to employees :
+1- Automated task to update exchange rate from "Banco Central de Costa Rica"
+2- Add fields to store values as received from BCCR and as used by Odoo 
 
-* hr_employee_initial_date
-* hr_employee_marital_exoneration
-* hr_employee_children_exoneration
+This module adds the following to currency rate :
+
+* res_currency_rate_original_rate
+* res_currency_rate_rate_2
+* res_currency_rate_original_rate_2
 
 
 Installation
@@ -23,7 +25,7 @@ To install this module, you need to:
 2.  Add the path to this repository in your configuration (addons-path)
 3.  Update the module list
 4.  Go to menu *Setting -> Modules -> Local Modules*
-5.  Search For *Employee Costa Rica Adapter*
+5.  Search For *Currency Costa Rica Adapter*
 6.  Install the module
 
 Usage
