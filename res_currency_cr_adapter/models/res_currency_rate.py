@@ -30,7 +30,7 @@ class ResCurrencyRate(models.Model):
     def _cron_update(self):
         # Get current date to get exchange rate for today
         currentDate = datetime.datetime.now().date()
-        today = currentDate.strftime('%d/%m/%Y'); #formato requerido por el BCCR dd/mm/yy
+        today = currentDate.strftime('%d/%m/%Y') #formato requerido por el BCCR dd/mm/yy
 
         # Get XML Schema for BCCR webservice SOAP
         imp = Import('http://www.w3.org/2001/XMLSchema', location='http://www.w3.org/2001/XMLSchema.xsd')
@@ -60,4 +60,11 @@ class ResCurrencyRate(models.Model):
             buyingRate = 1/buyingOriginalRate # Odoo utiliza un valor inverso. Es decir a cuantos dólares equivale 1 colón. Por eso se divide 1 colon entre el tipo de cambio. 
 
         # Save the exchange rate in database
-        newRate = self.create({'name': currentDate.isoformat(),'rate': sellingRate, 'original_rate':sellingOriginalRate, 'rate_2':buyingRate, 'original_rate_2':buyingOriginalRate, 'currency_id': 3})
+        today = currentDate.strftime('%Y-%m-%d')
+
+        ratesIds = self.env['res.currency.rate'].search([('name', '=', today)], limit=1)
+
+        if len(ratesIds) > 0:
+            newRate = ratesIds.write({'rate': sellingRate, 'original_rate':sellingOriginalRate, 'rate_2':buyingRate, 'original_rate_2':buyingOriginalRate, 'currency_id': 3})
+        else:
+            newRate = self.create({'name': today,'rate': sellingRate, 'original_rate':sellingOriginalRate, 'rate_2':buyingRate, 'original_rate_2':buyingOriginalRate, 'currency_id': 3})

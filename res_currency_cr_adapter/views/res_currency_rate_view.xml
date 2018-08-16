@@ -11,6 +11,7 @@
                     <field name='original_rate'/>
                     <field name='rate_2'/>
                     <field name='original_rate_2'/>
+                    <field name='write_date'/>
                     <field name="company_id" groups="base.group_multi_company"/>
         </tree>
       </field>

@@ -17,7 +17,7 @@ partername = 'Prueba API ' + currentDate.isoformat()
 #Get USD exchange rate from CRC
 today = currentDate.strftime('%d/%m/%Y')
 
-initialDate = "13/08/2018"
+initialDate = "14/08/2018"
 
 imp = Import('http://www.w3.org/2001/XMLSchema', location='http://www.w3.org/2001/XMLSchema.xsd')
 imp.filter.add('http://ws.sdde.bccr.fi.cr')
