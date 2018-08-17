@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.hr.payroll.cr</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="100"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Payroll" string="Payroll" data-key="hr_payroll" groups="hr_payroll.group_hr_payroll_manager">
+                    <h2>Costa Rica Payroll Settings</h2>
+                    <div class="row mt16 o_settings_container" id="hr_payroll_localization">
+                        <div class="col-md-6 col-xs-12 o_setting_box">
+                            <label string="Values defined by Tributación every year"/>
+                            <div class="o_setting_right_pane">
+                                <div class="mt16" id="rent_tax_first_value_range">
+                                    <label for="rent_tax_first_value"/>
+                                    <field name="rent_tax_first_value"/>
+                                </div>
+                                <div class="mt16" id="rent_tax_second_value_range">
+                                    <label for="rent_tax_second_value"/>
+                                    <field name="rent_tax_second_value"/>
+                                </div>
+                                <div class="mt16" id="child_monthly_exoneration">
+                                    <label for="child_monthly_exoneration_value"/>
+                                    <field name="child_monthly_exoneration_value"/>
+                                </div>
+                                <div class="mt16" id="spouse_monthly_exoneration">
+                                    <label for="spouse_monthly_exoneration_value"/>
+                                    <field name="spouse_monthly_exoneration_value"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

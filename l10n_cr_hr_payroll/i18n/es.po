@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * hr_employee_cr_payroll
+# * l10n_cr_hr_payroll
 #
 # Translators:
 # Akurey <odoo@akurey.com>, 2018
@@ -12,34 +12,33 @@ msgstr ""
 "PO-Revision-Date: 2018-08-01 08:00+0000\n"
 "Last-Translator: Akurey <odoo@akurey.com>, 2018\n"
 "Language-Team: Spanish \n"
-"Language: es-CR\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. module: hr_employee_cr_payroll
-#: model:ir.model.fields,field_description:hr_employee.field_hr_employee_initial_date
+#. module: l10n_cr_hr_payroll
+#: model:ir.model.fields,field_description:hr_employee_initial_date.field_hr_employee_initial_date
 msgid "Initial Date"
-msgstr "Fecha de Inicio"
+msgstr "Fecha de Inicio del empleado en la compañía"
 
-#. module: hr_employee_cr_payroll
-#: model:ir.model.fields,field_description:hr_employee.field_hr_employee_marital_exoneration
+#. module: l10n_cr_hr_payroll
+#: model:ir.model.fields,field_description:hr_employee__marital_exoneration.field_hr_employee_marital_exoneration
 msgid "Apply marital exoneration"
 msgstr "Aplicar exoneración por cónyugue en impuestos"
 
-#. module: hr_employee_cr_payroll
-#: model:ir.model.fields,field_description:hr_employee.field_hr_employee_children_exoneration
+#. module: l10n_cr_hr_payroll
+#: model:ir.model.fields,field_description:hr_employee_children_exoneration.field_hr_employee_children_exoneration
 msgid "Apply children exoneration"
 msgstr "Aplicar exoneración por hijos en impuestos"
 
-#. module: hr_employee_cr_payroll
+#. module: l10n_cr_hr_payroll
 #: model:ir.model.fields,field_description:res_currency_rate_original_rate.field_res_currency_rate_original_rate
 msgid "Original selling exchange rate from BCCR"
 msgstr "Valor original para el tipo de cambio de venta obtenido desde el BCCR"
 
-#. module: hr_employee_cr_payroll
-#: model:ir.model,name:hr_employee_cr_payroll.model_hr_employee
+#. module: l10n_cr_hr_payroll
+#: model:ir.model,name:l10n_cr_hr_payroll.model_hr_employee
 msgid "Employee adaptation for Costa Rica laws"
 msgstr "Empleado adaptado para Costa Rica"
-

@@ -1,13 +1,16 @@
-.. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
-    :alt: License: AGPL-3
+.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/agpl
+   :alt: License: AGPL-3
 
+==================
 Costa Rica Payroll
 ==================
 This module includes these functionalities:
-1- Automated task to add a vacation day every month for each employee.
-2- Add fields for Complementary retirement plan (apply exoneration over that amount)
-3- Add configuration fields for Salary rent tax ranges.
-4- Add default rules to calculate CCSS and rent according to the config fields.
+
+1. Automated task to add a vacation day every month for each employee
+2. Add fields for Complementary retirement plan (apply exoneration over that amount)
+3. Add configuration fields for Salary rent tax ranges.
+4. Add default rules to calculate CCSS and rent according to the config fields.
 
 This module adds the following to employees :
 
@@ -24,8 +27,8 @@ To install this module, you need to:
 1.  Clone the branch 11.0 of the repository https://github.com/akurey/ak-odoo.git
 2.  Add the path to this repository in your configuration (addons-path)
 3.  Update the module list
-4.  Go to menu *Setting -> Modules -> Local Modules*
-5.  Search For *Employee Costa Rica Adapter*
+4.  Go to menu *Apps*
+5.  Search For *Costa Rica Payroll*
 6.  Install the module
 
 Usage
@@ -53,9 +56,9 @@ Contributors
 Maintainer
 ----------
 
-.. image:: https://odoo-community.org/logo.png
-   :alt: Odoo Community Association
-   :target: https://odoo-community.org
+.. image:: https://www.akurey.com/wp-content/themes/casper/img/akurey_logo.png
+   :alt: AKUREY S.A.
+   :target: https://www.akurey.com
 
 This module is maintained by Akurey.
 

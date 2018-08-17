@@ -1,6 +1,8 @@
-.. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
-    :alt: License: AGPL-3
+.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/agpl
+   :alt: License: AGPL-3
 
+===========================
 Currency Costa Rica Adapter
 ===========================
 
@@ -24,7 +26,7 @@ To install this module, you need to:
 1.  Clone the branch 11.0 of the repository https://github.com/akurey/ak-odoo.git
 2.  Add the path to this repository in your configuration (addons-path)
 3.  Update the module list
-4.  Go to menu *Setting -> Modules -> Local Modules*
+4.  Go to menu *Apps*
 5.  Search For *Currency Costa Rica Adapter*
 6.  Install the module
 

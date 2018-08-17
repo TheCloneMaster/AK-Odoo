@@ -9,7 +9,7 @@
       <field name="inherit_id" ref="hr.view_employee_form"/>
       <field name="arch" type="xml">
 
-        <xpath expr="//field[@name='user_id']" position="after">
+        <xpath expr="//field[@name='medic_exam']" position="before">
             <field name='initial_date'/>
         </xpath>
 
@@ -21,6 +21,10 @@
             <field name='children_exoneration'/>
         </xpath>
 
+        <xpath expr="//field[@name='initial_date']" position="after">
+            <field name='supplementary_pension'/>
+        </xpath>
+            
       </field>
     </record>
 
