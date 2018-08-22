@@ -1,10 +1,10 @@
 # copyright  2018 Carlos Wong, Akurey S.A.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from odoo import api, fields, models
 from suds.client import Client
 from suds.xsd.doctor import Import, ImportDoctor
 from xmlrpc.client import ServerProxy
-from odoo import api, fields, models
 import datetime
 import xml.etree.ElementTree
 

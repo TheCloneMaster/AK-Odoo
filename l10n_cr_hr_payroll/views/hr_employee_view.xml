@@ -13,6 +13,10 @@
             <field name='initial_date'/>
         </xpath>
 
+        <xpath expr="//field[@name='initial_date']" position="after">
+            <field name='vacation_days'/>
+        </xpath>
+
         <xpath expr="//field[@name='marital']" position="after" >
             <field name='marital_exoneration'/>
         </xpath>
@@ -21,8 +25,8 @@
             <field name='children_exoneration'/>
         </xpath>
 
-        <xpath expr="//field[@name='initial_date']" position="after">
-            <field name='supplementary_pension'/>
+        <xpath expr="//field[@name='vacation_days']" position="after">
+            <field name='retirement_plan'/>
         </xpath>
             
       </field>

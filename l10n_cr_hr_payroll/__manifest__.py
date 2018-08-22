@@ -8,10 +8,9 @@
     'author': "Akurey S.A.",
     'website': 'https://github.com/akurey/ak-odoo',
     'license': 'AGPL-3',
-    'depends': ['base', 'hr'],
+    'depends': ['base', 'hr', 'hr_payroll'],
     'data': [
         'views/hr_employee_view.xml',
-        'views/res_config_settings.xml',
     ],
     'installable': True,
     'auto_install': False,
