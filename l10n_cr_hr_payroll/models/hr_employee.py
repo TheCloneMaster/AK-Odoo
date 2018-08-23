@@ -4,12 +4,14 @@
 from odoo import models, fields, api, _
 from datetime import datetime
 import datetime
+import logging
 
-
+_logger = logging.getLogger(__name__)
 
 class hr_employee(models.Model):
     _inherit = 'hr.employee'
 
+    
     marital_exoneration = fields.Boolean(
         help="Indicates if the marital exoneration should be applied in taxes computation",
         string="Apply exoneration?"
@@ -55,11 +57,16 @@ class hr_employee(models.Model):
             
     @api.model
     def _cron_update(self):
+        _logger.debug("=========================================================")
         
+        _logger.debug("Executing vacation assigment")
         current_day = datetime.datetime.now().day
         employees = self.env['hr.employee'].search([('first_day', '=', current_day)])
+        employees_list = "<ul>"
 
         for employee in employees:
+            _logger.debug("Assigning vacation day(s) to "+employee.name)
+            employees_list = employees_list + "<li>" + employee.name + "</li>"
             result = self.env['hr.holidays'].create({
                 'name': "Asignación " + datetime.datetime.now().strftime('%Y-%m-%d'),
                 'state': 'validate',
@@ -73,3 +80,7 @@ class hr_employee(models.Model):
                 'type' : 'add', 
                 'department_id': employee.department_id.id,
             })
+        _logger.debug("=========================================================")
+        employees_list = employees_list + "</ul>"
+
+        self.env['email.template'].browse(34).send_mail(self.id)

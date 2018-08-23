@@ -28,6 +28,10 @@ class ResCurrencyRate(models.Model):
 
     @api.model
     def _cron_update(self):
+
+        print("=========================================================")
+        print("Executing exchange rate update")
+
         # Get current date to get exchange rate for today
         currentDate = datetime.datetime.now().date()
         today = currentDate.strftime('%d/%m/%Y') #formato requerido por el BCCR dd/mm/yy
@@ -68,3 +72,5 @@ class ResCurrencyRate(models.Model):
             newRate = ratesIds.write({'rate': sellingRate, 'original_rate':sellingOriginalRate, 'rate_2':buyingRate, 'original_rate_2':buyingOriginalRate, 'currency_id': 3})
         else:
             newRate = self.create({'name': today,'rate': sellingRate, 'original_rate':sellingOriginalRate, 'rate_2':buyingRate, 'original_rate_2':buyingOriginalRate, 'currency_id': 3})
+        
+        print("=========================================================")
