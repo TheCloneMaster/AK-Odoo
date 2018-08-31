@@ -37,10 +37,10 @@ if employee.children_exoneration:
 
 tax_amount = 0.0
 
-if monthly_salary > range_max:
-    tax_amount = ((range_max - range_min ) * 0.1) + ((monthly_salary - range_max) * 0.15) - wife_amount - children_amount - first_payment_tax 
-else:
+if monthly_salary < range_max:
     tax_amount = ((monthly_salary - range_min) * 0.1) - wife_amount - children_amount - first_payment_tax
+else:
+    tax_amount = ((range_max - range_min ) * 0.1) + ((monthly_salary - range_max) * 0.15) - wife_amount - children_amount - first_payment_tax 
 
 if ((first_day == True) and (tax_amount > 0)):
     tax_amount = tax_amount / 2
@@ -68,3 +68,33 @@ field_value = ir_values.get_default('base.config.settings', 'abcde')
 
 range_max = float(payslip.env["ir.config_parameter"].get_param("rent_tax_second_value", False))
 first_day = payslip.env["hr.payslip"].is_month_first_day(range_min)
+
+
+# ======================================================================================================================================================
+# account.invoice.line.form id=449
+
+<?xml version="1.0"?>
+<form string="Invoice Line">
+                    <group>
+                        <group>
+                            <field name="product_id" context="parent and {'partner_id': parent.partner_id}"/>
+                            <label for="quantity"/>
+                            <div>
+                                <field name="quantity" class="oe_inline"/>
+                                <field name="uom_id" class="oe_inline" groups="product.group_uom"/>
+                            </div>
+                            <field name="price_unit"/>
+                            <field name="discount" groups="base.group_no_one"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field domain="[('company_id', '=', parent.company_id)]" name="account_id" groups="account.group_account_user"/>
+                            <field name="invoice_line_tax_ids" context="{'type':parent.get('type')}" domain="[('type_tax_use','!=','none'),('company_id', '=', parent.company_id)]" widget="many2many_tags" options="{'no_create': True}"/>
+                            <field domain="[('company_id', '=', parent.company_id)]" name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                        </group>
+                    </group>
+                    <label for="name"/>
+                    <field name="name"/>
+                </form>
+            
