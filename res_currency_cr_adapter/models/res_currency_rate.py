@@ -7,6 +7,9 @@ from suds.xsd.doctor import Import, ImportDoctor
 from xmlrpc.client import ServerProxy
 import datetime
 import xml.etree.ElementTree
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class ResCurrencyRate(models.Model):
@@ -29,8 +32,8 @@ class ResCurrencyRate(models.Model):
     @api.model
     def _cron_update(self):
 
-        print("=========================================================")
-        print("Executing exchange rate update")
+        _logger.info("=========================================================")
+        _logger.info("Executing exchange rate update")
 
         # Get current date to get exchange rate for today
         currentDate = datetime.datetime.now().date()
@@ -70,7 +73,10 @@ class ResCurrencyRate(models.Model):
 
         if len(ratesIds) > 0:
             newRate = ratesIds.write({'rate': sellingRate, 'original_rate':sellingOriginalRate, 'rate_2':buyingRate, 'original_rate_2':buyingOriginalRate, 'currency_id': 3})
+            _logger.info({'name': today, 'rate': sellingRate, 'original_rate':sellingOriginalRate, 'rate_2':buyingRate, 'original_rate_2':buyingOriginalRate, 'currency_id': 3})
         else:
             newRate = self.create({'name': today,'rate': sellingRate, 'original_rate':sellingOriginalRate, 'rate_2':buyingRate, 'original_rate_2':buyingOriginalRate, 'currency_id': 3})
+            _logger.info({'name': today, 'rate': sellingRate, 'original_rate':sellingOriginalRate, 'rate_2':buyingRate, 'original_rate_2':buyingOriginalRate, 'currency_id': 3})
         
-        print("=========================================================")
+
+        _logger.info("=========================================================")

@@ -32,10 +32,6 @@ To install this module, you need to:
 5.  Search For *Currency Costa Rica Adapter*
 6.  Install the module
 
-Usage
-=====
-
-
 
 Bug Tracker
 ===========

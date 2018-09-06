@@ -57,15 +57,14 @@ class hr_employee(models.Model):
             
     @api.model
     def _cron_update(self):
-        _logger.debug("=========================================================")
+        _logger.info("=========================================================")
         
-        _logger.debug("Executing vacation assigment")
+        _logger.info("Executing vacation assigment")
         current_day = datetime.datetime.now().day
-        employees = self.env['hr.employee'].search([('first_day', '=', current_day)])
+        employees = self.env['hr.employee'].search([('first_day', '=', current_day),('active', '=', True)])
+        _logger.info("Assigning vacation day to: ")
         employees_list = "<ul>"
-
         for employee in employees:
-            _logger.debug("Assigning vacation day(s) to "+employee.name)
             employees_list = employees_list + "<li>" + employee.name + "</li>"
             result = self.env['hr.holidays'].create({
                 'name': "Asignación " + datetime.datetime.now().strftime('%Y-%m-%d'),
@@ -80,7 +79,6 @@ class hr_employee(models.Model):
                 'type' : 'add', 
                 'department_id': employee.department_id.id,
             })
-        _logger.debug("=========================================================")
         employees_list = employees_list + "</ul>"
-
-        self.env['email.template'].browse(34).send_mail(self.id)
+        _logger.info(employees_list)
+        _logger.info("=========================================================")
