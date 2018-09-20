@@ -11,7 +11,6 @@ class AccountAsset(models.Model):
     asset_number = fields.Char('Asset Number', size=64)
     model = fields.Char('Model', size=64)
     serial = fields.Char('Serial no.', size=64)
-    vendor_id = fields.Many2one('res.partner', 'Vendor')
     manufacturer = fields.Char('Manufacturer')
     purchase_date = fields.Date('Purchase Date')
     purchase_amount = fields.Float('Purchase Price',digits=(10, 2), help="Price of the asset when bought")
