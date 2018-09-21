@@ -18,6 +18,6 @@ class AccountAsset(models.Model):
     purchase_amount = fields.Float('Purchase Price',digits=(10, 2), help="Price of the asset when bought")
     warranty_start_date = fields.Date('Warranty Start')
     warranty_end_date = fields.Date('Warranty End')
-    notes = fields.Text(string='Notes')
+    notes = fields.Text('Notes and comments')
 
 
