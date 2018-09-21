@@ -8,13 +8,15 @@
       <field name="inherit_id" ref="account_asset.view_account_asset_asset_purchase_tree"/>
       <field name="arch" type="xml">
         <tree>
-                    <field name='vendor_id'/>
+                    <field name='purchase_date'/>
+                    <field name='purchase_currency'/>
+                    <field name='purchase_amount'/>
                     <field name='manufacturer'/>
                     <field name='model'/>
                     <field name='serial'/>
                     <field name='asset_number'/>
                     <field name='user_id'/>
-                    <field name='purchase_date'/>
+
         </tree>
       </field>
     </record>
@@ -24,47 +26,25 @@
       <field name="model">account.asset.asset</field>
       <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
       <field name="arch" type="xml">
-
-        <xpath expr="//field[@name='date']" position="after">
-            <field name='asset_number'/>
-        </xpath>
-
-        <xpath expr="//field[@name='date']" position="after">
-            <field name='vendor_id'/>
-        </xpath>
-
-        <xpath expr="//field[@name='vendor_id']" position="after">
-            <field name='manufacturer'/>
-        </xpath>
-
-        <xpath expr="//field[@name='manufacturer']" position="after">
-            <field name='model'/>
-        </xpath>
-
-        <xpath expr="//field[@name='model']" position="after">
-            <field name='serial'/>
-        </xpath>
-
-        <xpath expr="//field[@name='asset_number']" position="after">
-            <field name='purchase_date'/>
-        </xpath>
-
-        <xpath expr="//field[@name='purchase_date']" position="after">
-            <field name='purchase_amount'/>
-        </xpath>
-
-        <xpath expr="//field[@name='purchase_amount']" position="after">
-            <field name='warranty_start_date'/>
-        </xpath>
-
-        <xpath expr="//field[@name='warranty_start_date']" position="after">
-            <field name='warranty_end_date'/>
-        </xpath>
-
-        <xpath expr="//field[@name='warranty_end_date']" position="after">
-            <field name='user_id'/>
-        </xpath>
+        <notebook position="before">
+            <group>
+                <group>
+                    <field name='asset_number'/>
+                    <field name='manufacturer'/>
+                    <field name='model'/>
+                    <field name='serial'/>
+                </group>
+                <group>
+                    <field name='purchase_date'/>
+                    <field name='purchase_currency'/>
+                    <field name='purchase_amount'/>
+                    <field name='warranty_start_date'/>
+                    <field name='warranty_end_date'/>
+                </group>
+                <field name='user_id'/>
+                <field name='notes'/>
+            </group>
+        </notebook>
       </field>
     </record>
-    
 </odoo>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="currency_crc_rate_cron" model="hr.salary.rule">
+            <field name="name">Salario Bruto ₡</field>
+            <field name="code">BrutoCRC</field>
+            <field name="code">BrutoCRC</field>
+            <field name="active">True</field>
+            <field name="sequence">1</field>
+            <field name="category_id">3</field>
+            <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="condition_range">contract.wage</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+
+# Available variables:
+#----------------------
+# payslip: object containing the payslips
+# employee: hr.employee object
+# contract: hr.contract object
+# rules: object containing the rules code (previously computed)
+# categories: object containing the computed salary rule categories (sum of amount of all rules belonging to that category).
+# worked_days: object containing the computed worked days.
+# inputs: object containing the computed inputs.
+
+# Note: returned value have to be set in the variable 'result'
+
+result = contract.wage / 2
+
+            </field>
+
+
+        
+        </record>
+
+     </data>
+</odoo>
