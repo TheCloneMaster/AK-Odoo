@@ -11,10 +11,8 @@
 
         <xpath expr="//field[@name='medic_exam']" position="before">
             <field name='initial_date'/>
-        </xpath>
-
-        <xpath expr="//field[@name='initial_date']" position="after">
             <field name='vacation_days'/>
+            <field name='retirement_plan'/>
         </xpath>
 
         <xpath expr="//field[@name='marital']" position="after" >
@@ -23,10 +21,6 @@
 
         <xpath expr="//field[@name='children']" position="after">
             <field name='children_exoneration'/>
-        </xpath>
-
-        <xpath expr="//field[@name='vacation_days']" position="after">
-            <field name='retirement_plan'/>
         </xpath>
             
       </field>
