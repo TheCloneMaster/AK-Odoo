@@ -15,7 +15,7 @@ class AccountAsset(models.Model):
     manufacturer = fields.Char('Manufacturer')
     purchase_date = fields.Date('Purchase Date')
     purchase_currency = fields.Many2one('res.currency', 'Purchase Currency', track_visibility='onchange')
-    purchase_amount = fields.Float('Purchase Price',digits=(10, 2), help="Price of the asset when bought")
+    purchase_amount = fields.Monetary('Purchase Price', currency_field='purchase_currency', help="Price of the asset when bought")
     warranty_start_date = fields.Date('Warranty Start')
     warranty_end_date = fields.Date('Warranty End')
     notes = fields.Text('Notes and comments')

@@ -82,3 +82,9 @@ class hr_employee(models.Model):
         employees_list = employees_list + "</ul>"
         _logger.info(employees_list)
         _logger.info("=========================================================")
+
+
+# class hr_employee_contract(models.Model):
+#     _inherit = 'hr.contract'
+
+#     wage = fields.Monetary('Wage', digits=(16, 2), currency_field='journal_id.currency_id', required=True, track_visibility="onchange", help="Employee's monthly gross wage.")

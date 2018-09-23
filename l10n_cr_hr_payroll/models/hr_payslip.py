@@ -42,3 +42,16 @@ class hrPaySlipCR(models.Model):
             result = slipline.total
         
         return result
+    
+    @api.model
+    def compute_gross_salary(self, payslip, contract):
+        tipo_cambio = 1
+        if payslip.date:
+            index = len(contract.journal_id.currency_id.rate_ids)
+            while (index  > 0) and ( payslip.date < contract.journal_id.currency_id.rate_ids[index].name):
+                index -= 1
+            tipo_cambio = contract.journal_id.currency_id.rate_ids[index].rate
+        else:
+            tipo_cambio = contract.journal_id.currency_id.rate
+
+        return contract.wage / 2 / tipo_cambio

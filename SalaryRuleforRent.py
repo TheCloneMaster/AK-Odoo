@@ -98,3 +98,32 @@ first_day = payslip.env["hr.payslip"].is_month_first_day(range_min)
                     <field name="name"/>
                 </form>
             
+
+
+# Available variables:
+#----------------------
+# payslip: object containing the payslips
+# employee: hr.employee object
+# contract: hr.contract object
+# rules: object containing the rules code (previously computed)
+# categories: object containing the computed salary rule categories 
+#(sum of amount of all rules belonging to that category).
+# worked_days: object containing the computed worked days.
+# inputs: object containing the computed inputs.
+# Note: returned value have to be set in the variable 'result'
+
+tipo_cambio = 1
+if contract.journal_id.currency_id != contract.company_id.currency_id
+    if payslip.date:
+        exchange_rate = contract.journal_id.currency_id.rate_ids.search([('name', '=', payslip.date), ], )
+        if exchange_rate:
+            tipo_cambio = exchange_rate.rate
+        else:
+            index = len(contract.journal_id.currency_id.rate_ids)
+            while (index  > 0) and ( payslip.date < contract.journal_id.currency_id.rate_ids[index].name):
+                index -= 1
+            tipo_cambio = contract.journal_id.currency_id.rate_ids[index].rate
+    else:
+        tipo_cambio = contract.journal_id.currency_id.rate
+
+result = contract.wage / 2 / tipo_cambio
