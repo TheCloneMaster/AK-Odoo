@@ -3,12 +3,12 @@
    :alt: License: AGPL-3
 
 ===========================
-Currency Costa Rica Adapter
+Costa Rica Currency Adapter
 ===========================
 
 This module includes these functionalities:
 
-1- Automated task to update exchange rate from "Banco Central de Costa Rica"
+1- Automated task to update exchange rate from "Banco Central de Costa Rica". Check Scheduled Actions for the task added
 2- Add fields to store values as received from BCCR and as used by Odoo 
 
 This module adds the following to currency rate :
@@ -27,7 +27,7 @@ To install this module, you need to:
 2.  Add the path to this repository in your configuration (addons-path)
 3.  Update the module list
 4.  Go to menu *Apps*
-5.  Search For *Currency Costa Rica Adapter*
+5.  Search For *Costa Rica Currency Adapter*
 6.  Install the module
 
 Usage
