@@ -8,7 +8,7 @@ class AccountAsset(models.Model):
     _inherit = 'account.asset.asset'
 
     user_id = fields.Many2one('res.users', 'Assigned to', track_visibility='onchange')
-    asset_number = fields.Char('Part Number', size=64)
+    part_number = fields.Char('Part Number', size=64)
     asset_number = fields.Char('Asset Number', size=64)
     model = fields.Char('Model', size=64)
     serial = fields.Char('Serial no.', size=64)

@@ -8,7 +8,7 @@
     'author': "Akurey S.A.",
     'website': 'https://github.com/akurey/ak-odoo',
     'license': 'AGPL-3',
-    'depends': ['base', 'hr', 'hr_payroll'],
+    'depends': ['base', 'hr_payroll_account'],
     'data': [
         'views/hr_employee_view.xml',
     ],

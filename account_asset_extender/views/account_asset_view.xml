@@ -33,6 +33,7 @@
                     <field name='manufacturer'/>
                     <field name='model'/>
                     <field name='serial'/>
+                    <field name='part_number'/>
                 </group>
                 <group>
                     <field name='purchase_date'/>
