@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record model="ir.ui.view" id="view_account_cancel_asset">
+		<field name="name">view.account.cancel.asset</field>
+		<field name="model">account.asset.asset</field>
+		<field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+		<field name="arch" type="xml">
+            <button name="set_to_draft" position="replace">
+                <button name="set_to_draft" string="Mettre en Brouillon" type="object" attrs="{'invisible': ['|', ('entry_count', '!=', 0), ('state', '=', 'draft')]}"/>
+            </button>
+            <button name="set_to_draft" position="after">
+                <button name="set_to_cancel" string="Annuler" type="object" attrs="{'invisible': ['|', ('entry_count', '!=', 0), ('state', 'in', ('draft', 'cancel'))]}"/>
+            </button>
+        </field>
+	</record>
+
+</odoo>
