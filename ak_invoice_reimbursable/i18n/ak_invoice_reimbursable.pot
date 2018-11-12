@@ -1,0 +1,25 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* ak_invoice_reimbursable
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ak_invoice_reimbursable
+#: model:ir.ui.view,arch_db:ak_invoice_reimbursable.view_invoice_supplier_reibursable_form
+msgid "Reimbursable"
+msgstr ""
+
+#. module: ak_invoice_reimbursable
+#: model:ir.model.fields,field_description:ak_invoice_reimbursable.field_ak_invoice_reimbursable_invoice_reimbursable_invoice_reimbursable
+msgid "Indicates if this invoice is for reimburse"
+msgstr ""
+

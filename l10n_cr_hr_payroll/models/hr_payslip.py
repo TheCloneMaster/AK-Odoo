@@ -18,27 +18,28 @@ class hrPaySlipCR(models.Model):
 
     
     @api.model
-    def get_first_payment(self, date_from, employee_id):
+    def get_payments_of_this_month(self, date_from, employee_id, gross_rule):
         result = 0
         currentDate = fields.Date.from_string(date_from)
-        firstPaySlipDate = "{0:0=4d}-".format(currentDate.year) + "{0:0=2d}-".format(currentDate.month) + "01"
-        firstPayslip = self.env['hr.payslip'].search([('date_from', '=', firstPaySlipDate),('employee_id', '=', employee_id)], limit=1)
+        first_day = "{0:0=4d}-".format(currentDate.year) + "{0:0=2d}-".format(currentDate.month) + "01"
+        paySlips = self.env['hr.payslip'].search([('employee_id', '=', employee_id),('date_from', '>=', first_day),('date_from', '<', date_from)])
 
-        if firstPayslip:
-            slipline = self.env['hr.payslip.line'].search([('slip_id', '=', firstPayslip.id),('name', '=', "Salario Bruto $")], limit=1)
-            result = slipline.total
-        
+        if paySlips:
+            for payslip in paySlips:
+                slipline = self.env['hr.payslip.line'].search([('slip_id', '=', payslip.id),('name', '=', gross_rule)], limit=1)
+                result = slipline.total
+
         return result
 
     @api.model
-    def get_first_payment_tax(self, date_from, employee_id):
+    def get_first_payment_tax(self, date_from, employee_id, tax_rule):
         result = 0
         currentDate = fields.Date.from_string(date_from)
         firstPaySlipDate = "{0:0=4d}-".format(currentDate.year) + "{0:0=2d}-".format(currentDate.month) + "01"
         firstPayslip = self.env['hr.payslip'].search([('date_from', '=', firstPaySlipDate),('employee_id', '=', employee_id)], limit=1)
 
         if firstPayslip:
-            slipline = self.env['hr.payslip.line'].search([('slip_id', '=', firstPayslip.id),('name', '=', "Renta $")], limit=1)
+            slipline = self.env['hr.payslip.line'].search([('slip_id', '=', firstPayslip.id),('name', '=', tax_rule)], limit=1)
             result = slipline.total
         
         return result

@@ -1,0 +1,15 @@
+<odoo>
+  <data>
+    <record id="invoice_supplier_reibursable_form" model="ir.ui.view">
+      <field name="name">account.invoice.supplier.reimbursable.form</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_supplier_form"/>
+      <field name="priority">2</field>
+      <field name="arch" type="xml">
+      <xpath expr="//field[@name='reference']" position="after">
+      <field name="invoice_reimbursable" string="Reembolsable"/>
+      </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>

@@ -24,8 +24,20 @@
         </xpath>
             
       </field>
+    
     </record>
-
+    <record id="view_employee_tree_ak_reimburse" model="ir.ui.view">
+        <field name="name">hr.employee.tree</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="first_day"/>
+                <field name="working_from_home"/>
+            </xpath>
+        </field>
+    </record>
+<!-- 
     <record id="view_contract_form_inherit_extension" model="ir.ui.view">
       <field name="name">view.hr.contract.form.inherit.extension</field>
       <field name="model">hr.contract</field>
@@ -33,10 +45,10 @@
       <field name="arch" type="xml">
 
         <xpath expr="//field[@name='struct_id']" position="after">
-            <field name='currency_id'/>
+            <field name='initial_date'/>
         </xpath>
 
       </field>
-    </record>
+    </record> -->
 
 </odoo>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem name="Self Service" id="main_menu_self_service" sequence="26"/>
+<!--        <menuitem name="Calendar" id="top_menu_employee_self_calendar" parent="employee_self_service_odoo.main_menu_self_service" sequence="1" action="calendar.action_calendar_event"/>-->
+        <menuitem name="Employee" id="top_menu_employee_self_service" parent="employee_self_service_odoo.main_menu_self_service" sequence="2"/>
+        
+        <menuitem id="sub_menu_employee_self_service"
+             action="employee_self_service_odoo.open_view_employee_own_info"
+             name="Employee Details" 
+             sequence="1"
+             parent="employee_self_service_odoo.top_menu_employee_self_service"/>
+             
+        <menuitem name="Timesheet" id="top_menu_employee_timesheet" parent="employee_self_service_odoo.main_menu_self_service" sequence="3"/>
+       <menuitem id="sub_menu_employee_timesheet"
+             action="hr_timesheet.act_hr_timesheet_line"
+             name="My Timesheets" 
+             sequence="1"
+             parent="employee_self_service_odoo.top_menu_employee_timesheet"/>
+         <!--<menuitem id="sub_menu_employee_timesheet_activities"
+             action="hr_timesheet.act_hr_timesheet_line"
+             name="Detailed Activities" 
+             sequence="2"
+             parent="employee_self_service_odoo.top_menu_employee_timesheet"/> -->
+         <menuitem id="sub_menu_employee_attendence"
+             action="hr_attendance.hr_attendance_action"
+             name="Attendences" 
+             sequence="3"
+             parent="employee_self_service_odoo.top_menu_employee_timesheet"/>
+         
+         <menuitem name="Leave Request" id="top_menu_employee_leave_request" parent="employee_self_service_odoo.main_menu_self_service" sequence="4"/>
+        
+        <menuitem id="sub_menu_employee_leave_request"
+             action="hr_holidays.open_ask_holidays"
+             name="Leaves Requests" 
+             sequence="1"
+             parent="employee_self_service_odoo.top_menu_employee_leave_request"/>
+             
+         <menuitem name="Expenses" id="top_menu_employee_expense" parent="employee_self_service_odoo.main_menu_self_service" sequence="5"/>
+        
+         <menuitem id="sub_menu_employee_expense"
+             action="hr_expense.hr_expense_actions_my_unsubmitted"
+             name="Expenses to Submit" 
+             sequence="1"
+             parent="employee_self_service_odoo.top_menu_employee_expense"/>
+         
+         <menuitem name="Maintenance" id="top_menu_employee_maintenance" parent="employee_self_service_odoo.main_menu_self_service" sequence="6"/>
+        
+        <menuitem id="sub_menu_employee_maintenance"
+             action="maintenance.hr_equipment_request_action"
+             name="Maintenance Requests" 
+             sequence="1"
+             parent="employee_self_service_odoo.top_menu_employee_maintenance"/>
+             
+         
+         <menuitem name="PaySlip" id="top_menu_employee_pay_slip" parent="employee_self_service_odoo.main_menu_self_service" sequence="7"/>
+        
+         <menuitem id="sub_menu_employee_pay_sleep"
+             action="hr_payroll.action_hr_payslip_run_tree"
+             name="Employee Payslips" 
+             sequence="1"
+             parent="employee_self_service_odoo.top_menu_employee_pay_slip"/>
+         <menuitem id="sub_menu_employee_contracts"
+             action="hr_contract.action_hr_contract"
+             name="Contracts" 
+             sequence="2"
+             parent="employee_self_service_odoo.top_menu_employee_pay_slip"/>
+             
+         <menuitem name="Projects" id="top_menu_employee_project" parent="employee_self_service_odoo.main_menu_self_service" sequence="8"/>
+         
+         <menuitem id="sub_menu_employee_project"
+             action="project.open_view_project_all"
+             name="Projects" 
+             sequence="1"
+             parent="employee_self_service_odoo.top_menu_employee_project"/>
+         <menuitem id="sub_menu_employee_task"
+             action="project.action_view_task"
+             name="Tasks" 
+             sequence="2"
+             parent="employee_self_service_odoo.top_menu_employee_project"/>
+         
+    </data>
+</odoo>

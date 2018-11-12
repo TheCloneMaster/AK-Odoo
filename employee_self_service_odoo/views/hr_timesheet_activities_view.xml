@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="act_hr_self_timesheet_line" model="ir.actions.act_window">
+            <field name="name">Activities</field>
+            <field name="res_model">account.analytic.line</field>
+            <field name="domain">[('project_id', '!=', False)]</field>
+            <field name="context">{"search_default_today":1}</field>
+            <field name="search_view_id" ref="hr_timesheet.hr_timesheet_line_search"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to record activities.
+              </p><p>
+                You can register and track your workings hours by project every
+                day. Every time spent on a project will become a cost and can be re-invoiced to
+                customers if required.
+              </p>
+            </field>
+        </record>
+    </data>
+</odoo>
