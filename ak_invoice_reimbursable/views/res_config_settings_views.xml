@@ -11,6 +11,10 @@
                  <div class="col-xs-12 col-md-6 o_setting_box" id="fe-reimburse" title="Default expense account when importing Costa Rican electronic invoices automatically">
                     <label class="o_form_label col-xs-12" for="default_expense_account_id" data-original-title="" title="">Default account for expenses when importing electronic invoice</label>
 					<field class="col-xs-12" name="default_expense_account_id" string="Default account for expenses when importing electronic invoice" />
+                    <label class="o_form_label col-xs-12" for="reimbursable_email" data-original-title="" title="">email to receive reimbursable electronic invoices</label>
+                    <field class="col-xs-12" name="reimbursable_email" string="email to receive reimbursable electronic invoices" />
+                    <label class="o_form_label col-xs-12" for="reimbursable_email" data-original-title="" title="">email to receive reimbursable electronic invoices</label>
+                    <field class="col-xs-12" name="notification_email" string="email to notify any issue with electronic invoices procesing" />
                 </div>
 			</xpath>
         </field>
