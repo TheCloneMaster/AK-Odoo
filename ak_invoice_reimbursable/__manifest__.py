@@ -8,7 +8,7 @@
     'author': "Akurey S.A.",
     'website': 'https://github.com/akurey/ak-odoo',
     'license': 'AGPL-3',
-    'depends': ['base', 'hr_expense', 'cr_electronic_invoice'],
+    'depends': ['base', 'hr_expense', 'document', 'cr_electronic_invoice'],
     'data': [
         'views/account_invoice_views.xml',
         'views/res_config_settings_views.xml',

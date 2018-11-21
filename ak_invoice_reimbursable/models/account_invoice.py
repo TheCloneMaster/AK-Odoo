@@ -93,8 +93,7 @@ class AccountSupplierInvoiceElectronic(models.Model):
             consecutive = root.findall('NumeroConsecutivo')[0].text
 
 
-            partner = self.env['res.partner'].search(
-                [('vat', '=', partner_id)])
+            partner = self.env['res.partner'].search([('vat', '=', partner_id)])
             if partner and self.partner_id.id != partner.id:
                 raise UserError('El cliente con identificación ' + partner_id + ' no coincide con el cliente de esta factura: ' + self.partner_id.vat)
             elif str(self.date_invoice) != date_issuance:
@@ -146,15 +145,16 @@ class AccountSupplierInvoiceElectronic(models.Model):
                 if tax_nodes:
                     for tax_node in tax_nodes:
                         if tax_node:
-                            tax = self.env['account.tax'].search([('tax_code', '=', re.sub(r"[^0-9]+", "", tax_node.find('Codigo').text)), ('type_tax_use', '=', 'purchase')], limit=1)
                             tax_amount = float(tax_node.find('Monto').text)
-                            if tax and tax.amount == float(re.sub(r"[^0-9.]+", "", tax_node.find('Tarifa').text)):
-                                taxes += tax
-                                total_tax += tax_amount
-                            else:
-                                raise UserError('Un tipo de impuesto en el XML no existe en la configuración: ' +  tax_node.find('Codigo').text)
-                            
-                            #TODO: insert exonerations
+                            if tax_amount > 0:
+                                tax = self.env['account.tax'].search([('tax_code', '=', re.sub(r"[^0-9]+", "", tax_node.find('Codigo').text)), ('type_tax_use', '=', 'purchase')], limit=1)
+                                tax_amount = float(tax_node.find('Monto').text)
+                                if tax and tax.amount == float(re.sub(r"[^0-9.]+", "", tax_node.find('Tarifa').text)):
+                                    taxes += tax
+                                    total_tax += tax_amount
+                                else:
+                                    raise UserError('Un tipo de impuesto en el XML no existe en la configuración: ' + tax_node.find('Codigo').text)
+                            # TODO: insert exonerations
 
                 invoice_line = self.env['account.invoice.line'].new({
                         'name': line.find('Detalle').text,
@@ -188,6 +188,159 @@ class AccountSupplierInvoiceElectronic(models.Model):
         #                                 count=1))  # quita el namespace de los elementos
         #     self.state_tributacion = 
 
+    @api.multi
+    def action_move_create(self):
+        """ Creates invoice related analytics and financial move lines """
+        account_move = self.env['account.move']
+
+        for inv in self:
+            if not inv.journal_id.sequence_id:
+                raise UserError(_('Please define sequence on the journal related to this invoice.'))
+            if not inv.invoice_line_ids:
+                raise UserError(_('Please create some invoice lines.'))
+            if inv.move_id:
+                continue
+
+            ctx = dict(self._context, lang=inv.partner_id.lang)
+
+            if not inv.date_invoice:
+                inv.with_context(ctx).write({'date_invoice': fields.Date.context_today(self)})
+            if not inv.date_due:
+                inv.with_context(ctx).write({'date_due': inv.date_invoice})
+            company_currency = inv.company_id.currency_id
+
+            # create move lines (one per invoice line + eventual taxes and analytic lines)
+            iml = inv.invoice_line_move_line_get()
+            iml += inv.tax_line_move_line_get()
+
+            diff_currency = inv.currency_id != company_currency
+            # create one move line for the total and possibly adjust the other lines amount
+            total, total_currency, iml = inv.with_context(ctx).compute_invoice_totals(company_currency, iml)
+
+            inv_account_currency = False
+            if company_currency.id != inv.account_id.currency_id.id:
+                inv_account_currency = inv.account_id.currency_id.with_context(date=self.date_invoice)
+
+            name = inv.name or '/'
+            if inv.payment_term_id:
+                totlines = inv.with_context(ctx).payment_term_id.with_context(currency_id=company_currency.id).compute(total, inv.date_invoice)[0]
+                res_amount_currency = total_currency
+                ctx['date'] = inv.date or inv.date_invoice
+                for i, t in enumerate(totlines):
+                    if inv.currency_id != company_currency:
+                        amount_currency = company_currency.with_context(ctx).compute(t[1], inv.currency_id)
+                    else:
+                        amount_currency = False
+
+                    # last line: add the diff
+                    res_amount_currency -= amount_currency or 0
+                    if i + 1 == len(totlines):
+                        amount_currency += res_amount_currency
+
+                    iml.append({
+                        'type': 'dest',
+                        'name': name,
+                        'price': t[1],
+                        'account_id': inv.account_id.id,
+                        'date_maturity': t[0],
+                        'amount_currency': (diff_currency and amount_currency) or (inv_account_currency and (inv_account_currency.rate * t[1])),
+                        'currency_id': (diff_currency and inv.currency_id.id) or (inv_account_currency and inv_account_currency.id),
+                        'invoice_id': inv.id
+                    })
+            else:
+                iml.append({
+                    'type': 'dest',
+                    'name': name,
+                    'price': total,
+                    'account_id': inv.account_id.id,
+                    'date_maturity': inv.date_due,
+                    'amount_currency': (diff_currency and total_currency) or (inv_account_currency and (inv_account_currency.rate * total)),
+                    'currency_id': (diff_currency and inv.currency_id.id) or (inv_account_currency and inv_account_currency.id),
+                    'invoice_id': inv.id
+                })
+            part = self.env['res.partner']._find_accounting_partner(inv.partner_id)
+            line = [(0, 0, self.line_get_convert(l, part.id)) for l in iml]
+            line = inv.group_lines(iml, line)
+
+            journal = inv.journal_id.with_context(ctx)
+            line = inv.finalize_invoice_move_lines(line)
+
+            date = inv.date or inv.date_invoice
+            move_vals = {
+                'ref': inv.reference,
+                'line_ids': line,
+                'journal_id': journal.id,
+                'date': date,
+                'narration': inv.comment,
+            }
+            ctx['company_id'] = inv.company_id.id
+            ctx['invoice'] = inv
+            ctx_nolang = ctx.copy()
+            ctx_nolang.pop('lang', None)
+            move = account_move.with_context(ctx_nolang).create(move_vals)
+            # Pass invoice in context in method post: used if you want to get the same
+            # account move reference when creating the same invoice after a cancelled one:
+            move.post()
+            # make the invoice point to that move
+            vals = {
+                'move_id': move.id,
+                'date': date,
+                'move_name': move.name,
+            }
+            inv.with_context(ctx).write(vals)
+        return True
+
+    @api.model
+    def invoice_line_move_line_get(self):
+        res = []
+        for line in self.invoice_line_ids:
+            if line.quantity==0:
+                continue
+            tax_ids = []
+            for tax in line.invoice_line_tax_ids:
+                tax_ids.append((4, tax.id, None))
+                for child in tax.children_tax_ids:
+                    if child.type_tax_use != 'none':
+                        tax_ids.append((4, child.id, None))
+            analytic_tag_ids = [(4, analytic_tag.id, None) for analytic_tag in line.analytic_tag_ids]
+
+            if line.account_id.currency_id.id and (line.account_id.currency_id.id != self.company_id.currency_id.id):
+                currency_rate = line.account_id.currency_id.with_context(date=self.date_invoice).rate
+                move_line_dict = {
+                    'invl_id': line.id,
+                    'type': 'src',
+                    'name': line.name.split('\n')[0][:64],
+                    'price_unit': line.price_unit,
+                    'quantity': line.quantity,
+                    'price': line.price_subtotal,
+                    'account_id': line.account_id.id,
+                    'product_id': line.product_id.id,
+                    'uom_id': line.uom_id.id,
+                    'account_analytic_id': line.account_analytic_id.id,
+                    'currency_id': line.account_id.currency_id.id,
+                    'currency_amount': line.price_subtotal * currency_rate,
+                    'tax_ids': tax_ids,
+                    'invoice_id': self.id,
+                    'analytic_tag_ids': analytic_tag_ids
+                }
+            else:
+                move_line_dict = {
+                    'invl_id': line.id,
+                    'type': 'src',
+                    'name': line.name.split('\n')[0][:64],
+                    'price_unit': line.price_unit,
+                    'quantity': line.quantity,
+                    'price': line.price_subtotal,
+                    'account_id': line.account_id.id,
+                    'product_id': line.product_id.id,
+                    'uom_id': line.uom_id.id,
+                    'account_analytic_id': line.account_analytic_id.id,
+                    'tax_ids': tax_ids,
+                    'invoice_id': self.id,
+                    'analytic_tag_ids': analytic_tag_ids
+                }
+            res.append(move_line_dict)
+        return res
 
     @api.onchange('xml_comprobante')
     def _onchange_xml_comprobante(self):
@@ -195,3 +348,125 @@ class AccountSupplierInvoiceElectronic(models.Model):
             root = ET.fromstring(re.sub(' xmlns="[^"]+"', '', base64.b64decode(self.xml_comprobante).decode("utf-8"),
                                         count=1))  # quita el namespace de los elementos
             self.fname_xml_comprobante = 'comprobante_' + root.findall('Clave')[0].text + '.xml'
+
+    @api.model
+    def message_new(self, msg, custom_values=None):
+        reimbursable_email = self.env['ir.config_parameter'].sudo().get_param('reimbursable_email')
+        
+        # Is it for reimburse
+        reimbursable = reimbursable_email in msg['to']
+
+        # TODO: Se identifican los XMLs por clave y por tipo y los PDFs se meten todos en una lista para adjuntarlos a todas las facturas en este email.
+        # Porque no tenemos un metodo seguro de buscar la clave dentro del PDF
+        invoices = dict()
+        pdfs_list = list()
+        for attachment in msg['attachments']:
+            if attachment.fname.endswith('.xml'):
+                root = ET.fromstring(re.sub(' xmlns="[^"]+"', '', attachment.content.decode("utf-8"), count=1))
+                clave = root.find('Clave').text
+                if clave not in invoices: 
+                    invoices[clave] = dict()
+                if root.tag == 'FacturaElectronica':
+                    invoices[clave]['invoice_attachment'] = attachment
+                elif root.tag == 'MensajeHacienda':
+                    invoices[clave]['respuesta_hacienda'] = attachment
+            elif attachment.fname.endswith('.pdf'):
+                pdfs_list.append(attachment)
+
+        for clave in invoices:
+            invoice = False
+            if 'invoice_attachment' in invoices[clave]:
+                # Check if it is already an invoice registered with the Clave
+                invoice = self.env['account.invoice'].search([('number_electronic', '=', clave)])
+                partner = False
+                if not invoice:
+                    root = ET.fromstring(re.sub(' xmlns="[^"]+"', '', invoices[clave]['invoice_attachment'].content.decode("utf-8"), count=1))
+
+                    # Revisar si el proveedor ya existe, si no, se crea
+                    partner_id = root.findall('Emisor')[0].find('Identificacion')[1].text
+                    partner = self.env['res.partner'].search([('vat', '=', partner_id)])
+
+                    if not partner:
+                        partner_node = root.find('Emisor')
+                        location_node = partner_node.find('Ubicacion')
+                        partner = self.env['res.partner'].sudo().new({
+                            'name': partner_node.find('Nombre').text,
+                            'commercial_name': partner_node.find('Nombre').text,
+                            'identification_id': partner_node.find('Identificacion')[0].text,
+                            'vat': partner_node.find('Identificacion')[1].text,
+                            'Provincia': location_node.find('Provincia').text,
+                            'Canton': location_node.find('Canton').text,
+                            'Distrito': location_node.find('Distrito').text,
+                            'Barrio': location_node.find('Barrio').text,
+                            'street': location_node.find('OtrasSenas').text,
+                            'phone_code': partner_node.find('Telefono')[0].text,
+                            'phone': partner_node.find('Telefono')[1].text,
+                        })
+                    
+                    # TODO: Crear el invoice: Asignar el proveedor, asignar el xml de la factura, attachear los archivos y llamar al metodo charge_xml_data
+                    invoice = self.env['account.invoice'].sudo().new({
+                                                            'partner_id': partner_id,
+                                                            'xml_supplier_approval': base64.b64encode(invoices[clave]['invoice_attachment'].content),
+                                                            'fname_xml_supplier_approval': invoices[clave]['invoice_attachment'].fname,
+                                                            'invoice_reimbursable': reimbursable,
+                                                            })
+
+                    invoice.charge_xml_data()
+
+                    
+                else:
+                    # TODO: The invoice already exist. What should we do? ignore the file?
+                    print("falta implementar")
+
+            if 'respuesta_hacienda' in invoices[clave]:
+                # Check if it is already an invoice registered with the Clave
+                if not invoice:
+                    invoice = self.env['account.invoice'].search([('electronic_number', '=', clave)])
+
+                if invoice:
+                    fname = 'respuesta_' + clave + '.xml'
+                    ir_id = self.env['ir.attachment'].search([('datas_fname', '=', 'respuesta_' + clave + '.xml'), ('res_model', '=', self._name), ('res_id', '=', invoice.id)])
+                    if not ir_id:
+                        invoice.fname_xml_respuesta_tributacion = fname
+                        invoice.xml_respuesta_tributacion = invoices[clave]['respuesta_hacienda'].content
+                        document_vals = {'name': 'respuesta_' + clave + '.xml',
+                                        'datas': invoice.xml_respuesta_tributacion,
+                                        'datas_fname': fname,
+                                        'res_model': self._name,
+                                        'res_id': invoice.id,
+                                        'type': 'binary',
+                                        }
+                        ir_id = self.env['ir.attachment'].sudo().create(document_vals)
+
+                else:
+                    # TODO: What should we do if we receive the XMl "Respuesta Hacienda", but there is no invoice for this XML.
+                    # send an email to contabilidad@akurey.com alert?
+                    print("falta implementar")
+
+            # If there is an invoice with this "Clave" (invoice) attach pdfs
+            if invoice:
+                for pdf in pdfs_list:
+                    ir_id = self.env['ir.attachment'].search([('datas_fname', '=', pdf.fname),('res_model', '=', self._name),('res_id', '=', invoice.id)])
+                    if not ir_id:
+                        document_vals = {'name': pdf.fname,
+                                        'datas': base64.b64encode(pdf.content),
+                                        'datas_fname': pdf.fname,
+                                        'res_model': self._name,
+                                        'res_id': invoice.id,
+                                        'type': 'binary',
+                                        }
+                        ir_id = self.env['ir.attachment'].sudo().create(document_vals)
+
+                if len(pdfs_list) > 1:
+                    # TODO: Notificar por email que hay una mezcla de PDFs en esta factura para que el encargo revise
+                    print("falta implementar")
+            else:
+                # TODO: Notificar que llego un PDF sin XML
+                print("IMplementar notificar por email")
+
+            if invoice and (not invoice.state_invoice_partner):
+                # Enviar el MensajeReceptor. Poner el valor de aceptado en state_invoice_partner y Llamar al método send_acceptance_message
+                invoice.state_invoice_partner = '1'
+                invoice.send_acceptance_message()
+
+

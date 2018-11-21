@@ -37,17 +37,10 @@ class HrExpense(models.Model):
                 line['price'] = self.currency_id.with_context(date=move_date or fields.Date.context_today(self)).compute(line['price'], company_currency)
             
             elif self.account_id.currency_id and (self.account_id.currency_id != company_currency):
-                currency_id = self.account_id.currency_id.id
+                account_currency = self.account_id.currency_id.with_context(date=self.date)
 
-                index = 0
-                array_length = len(self.account_id.currency_id.rate_ids) - 1
-                while self.date < self.account_id.currency_id.rate_ids[index].name or index == array_length:
-                    index += 1
-
-                amount_currency = line['price'] / self.account_id.currency_id.rate_ids[index].original_rate
-
-                line['currency_id'] = currency_id
-                line['amount_currency'] = amount_currency
+                line['currency_id'] = account_currency.id
+                line['amount_currency'] = line['price'] * account_currency.rate
 
             total -= line['price']
             total_currency -= line['amount_currency'] or line['price']
@@ -118,13 +111,8 @@ class HrExpense(models.Model):
 
             # if the account expense requires a second currency it calculates the currency amount
             if emp_account.currency_id and (emp_account.currency_id != expense.currency_id):
-                currency_id = emp_account.currency_id.id
-                index = 0
-                array_length = len(emp_account.currency_id.rate_ids) - 1
-                while expense.date < emp_account.currency_id.rate_ids[index].name or index == array_length:
-                    index += 1
-
-                amount_currency = total / emp_account.currency_id.rate_ids[index].original_rate
+                currency = emp_account.currency_id.with_context(date=expense.date)
+                amount_currency = total * currency.rate
 
                 move_lines.append({
                     'type': 'dest',
@@ -135,7 +123,7 @@ class HrExpense(models.Model):
                     'payment_id': payment_id,
                     'expense_id': expense.id,
                     'amount_currency': amount_currency,
-                    'currency_id': currency_id,
+                    'currency_id': currency.id,
                     })
             else:
                 move_lines.append({
